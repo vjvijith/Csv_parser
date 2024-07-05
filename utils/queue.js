@@ -2,7 +2,6 @@ const Queue = require('bull');
 const mongoose = require('mongoose');
 const CsvData = require('../models/CsvData');
 const { processCsv } = require('./csvProcessor');
-
 // Create a new queue
 const fileQueue = new Queue('fileProcessing', process.env.REDIS_URL);
 
@@ -19,6 +18,14 @@ fileQueue.process('processCSV', async (job) => {
     }
 
     const { path, userId } = job.data;
+
+    // Check if job has already been processed
+    const existingJob = await CsvData.findOne({ jobId: job.id, status: 'completed' });
+    if (existingJob) {
+      console.log(`Job ${job.id} has already been processed.`);
+      return;
+    }
+
     await processCsv(path, userId, job.id);
     await CsvData.updateMany({ jobId: job.id }, { status: 'completed' });
   } catch (error) {

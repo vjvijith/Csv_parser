@@ -59,7 +59,12 @@ const processCSV = (filePath, userId, jobId) => {
       await CsvData.insertMany(results);
       console.log('Data inserted successfully.');
       
-      fs.unlinkSync(absoluteFilePath); // Delete the file after processing
+      // Check if the job is still active before deleting the file
+      const job = await CsvData.findOne({ jobId });
+      if (job && job.status === 'completed') {
+        fs.unlinkSync(absoluteFilePath);
+      }
+      
       resolve();
     } catch (error) {
       console.error('Error processing CSV:', error);

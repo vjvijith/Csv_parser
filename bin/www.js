@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require('../index');
+var app = require('../app');
 var debug = require('debug')('csv-api-app:server');
 var http = require('http');
 
@@ -13,7 +13,6 @@ var http = require('http');
  */
 
 var port = normalizePort(process.env.PORT || '3001');
-console.log(port);
 app.set('port', port);
 
 /**
@@ -27,6 +26,7 @@ var server = http.createServer(app);
  */
 
 server.listen(port);
+console.log(`Server Listening on port ${port}`);
 server.on('error', onError);
 server.on('listening', onListening);
 
