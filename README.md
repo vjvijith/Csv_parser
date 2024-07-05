@@ -41,7 +41,7 @@ This is a Node.js API for handling CSV uploads and processing.
 - POST /api/auth/login - Log in a user
 - POST /api/csv/upload - Upload a CSV file
     - Headers: Authorization: Bearer <token>
-    - Form Data: file: <file>
+    - Form Data: file:<file>
 - GET /api/csv/status/:jobId - Get the status of a CSV processing job
     - Headers: Authorization: Bearer <token>
 
